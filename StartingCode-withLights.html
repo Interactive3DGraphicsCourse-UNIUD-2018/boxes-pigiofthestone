@@ -16,7 +16,7 @@
 		}
 
 	</style>
-		<script src="lib/three.min.js"></script>
+		<script src="lib/three.js"></script>
 		<script src="lib/stats.min.js"></script>
 		<script src="lib/Coordinates.js"></script>
 		<script src="lib/OrbitControls.js"></script>
@@ -26,7 +26,7 @@
 
 		<script>
 
-		var scene, camera, renderer, controls, stats, barca, platformLeft, platformRight;
+		var scene, camera, renderer, controls, stats, barca, platformLeft, platformRight, platformRightAngle, platformLeftAngle;
 
 		function Start() {
 			scene = new THREE.Scene();
@@ -165,19 +165,21 @@
 			towerLeft.position.x = -22.5;
 			towerLeft.position.z = 10;
 			//Piattaforma destra
-			var geometry = new THREE.BoxGeometry(10,1,20);
+			var geometry = new THREE.BoxGeometry(20,0.8,19.8);
 			var material = new THREE.MeshBasicMaterial({color: 0x101010, wireframe:false});
 			platformRight = new THREE.Mesh(geometry, material);
-			platformRight.position.x = 5;
+			platformRight.position.x = 10;
 			platformRight.position.z = 10;
 			platformRight.position.y = 3.5;
+			platformRightAngle = 0;
 			//Piattaforma sinistra
-			var geometry = new THREE.BoxGeometry(10,1,20);
+			var geometry = new THREE.BoxGeometry(20,0.8,19.8);
 			var material = new THREE.MeshBasicMaterial({color: 0x101010, wireframe:false});
 			platformLeft = new THREE.Mesh(geometry, material);
-			platformLeft.position.x = -5;
+			platformLeft.position.x = -10;
 			platformLeft.position.z = 10;
 			platformLeft.position.y = 3.5;
+			platformLeftAngle = 0;
 			//Gruppo ponte levatoio
 			var ponteLevatoio = new THREE.Group();
 			ponteLevatoio.add(platformLeft,platformRight,towerLeft,towerRight);
@@ -213,6 +215,37 @@
 			scenarioL2.position.y = 1.5;
 
 			scene.add(scenarioR, scenarioL, scenarioL2);
+
+
+			//ALBERO
+			//Tronco
+			var geometry = new THREE.BoxGeometry(1,2,1);
+			var material = new THREE.MeshBasicMaterial({color: 0x644117});
+			var tronco = new THREE.Mesh(geometry, material);
+			tronco.position.y = 1;
+			//Foglie
+			var geometry = new THREE.BoxGeometry(3,4,3);
+			var material = new THREE.MeshBasicMaterial({color: 0x00A550});
+			var foglie1 = new THREE.Mesh(geometry, material);
+			foglie1.position.y = 4;
+			var geometry = new THREE.BoxGeometry(5,2,5);
+			var material = new THREE.MeshBasicMaterial({color: 0x00A550});
+			var foglie2 = new THREE.Mesh(geometry, material);
+			foglie2.position.y = 4;
+			var geometry = new THREE.BoxGeometry(2,1,2);
+			var material = new THREE.MeshBasicMaterial({color: 0x00A550});
+			var foglie3 = new THREE.Mesh(geometry, material);
+			foglie3.position.y = 6;
+			//Gruppo albero
+			var albero = new THREE.Group();
+			albero.add(tronco,foglie1,foglie2,foglie3);
+			albero.castShadow = true;
+			albero.receiveShadow = true;
+			albero.position.y = 1;
+			albero.position.x = 25;
+			albero.position.z = 30;
+			scene.add(albero);
+
 
 			//Gestione della luce
 			hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 );
@@ -261,23 +294,38 @@
 			stats.update();
 			Render();
 
-			barca.position.z += 0.01;
+			barca.position.z += 0.05;
 
-			if (barca.position.z > -10){
-				for(var i = 0; i < 45; i++){
-					var axis = new THREE.Vector3(0,0,1);
-					platformRight.rotateOnAxis(axis, i);
-					platformLeft.rotateOnAxis(axis, i);
-				}
+			//Apertura del ponte levatoio
+			if (barca.position.z > -10 && barca.position.z < 20 && platformLeftAngle < Math.PI/4){
+					//Rotazione del ponte levatoio
+					var angleRotation = Math.PI/180;
+					platformRightAngle += angleRotation;
+	        platformLeftAngle += angleRotation;
+					platformRight.rotateZ(- angleRotation);
+	        platformLeft.rotateZ(angleRotation);
 			}
 
-			console.log( barca.position.z );
+			//Chiusura ponte levatoio
+			if (barca.position.z > 20 && platformLeftAngle > 0){
+					//Rotazione del ponte levatoio
+					var angleRotation = -Math.PI/180;
+					platformRightAngle += angleRotation;
+	        platformLeftAngle += angleRotation;
+					platformRight.rotateZ(-angleRotation);
+	        platformLeft.rotateZ(angleRotation);
+			}
+
+
+
+			console.log(platformLeftAngle );
 
 		}
 
 		function Render() {
 
 			renderer.render(scene, camera);
+
 		}
 
 		Start();
