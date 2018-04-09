@@ -22,7 +22,7 @@
 		<script src="lib/OrbitControls.js"></script>
 		<script src="lib/TextureLoader.js"></script>
 
-		
+
 	</head>
 	<body>
 
@@ -46,52 +46,86 @@
 			camera.lookAt( new THREE.Vector3(0,0,0));
 
 
-			// terrain
-			var img = new Image();
-			img.onload = function () {
+			function getHeightData(img, scale) {
+				if(scale == undefined) {
+					scale = 1;
+				}
 
-				//get height data from img
-				var data = getHeightData(img,0.1);
+			    var canvas = document.createElement('canvas');
+			    canvas.width = img.width;
+			    canvas.height = img.height;
+			    var context = canvas.getContext('2d');
 
-                var geometry = new THREE.BoxGeometry(1,1,1);
-                var material1 = new THREE.MeshBasicMaterial({color: 0xdee334});
-                var material2 = new THREE.MeshBasicMaterial({color: 0x208c0d});
-                var material3 = new THREE.MeshBasicMaterial({color: 0x8c7d62});
+			    var size = img.width * img.height;
+			    var data = new Float32Array(size);
 
-                var x = 0;
-                var terreno = [img.width];
-								for(i = 0; i < img.width; i++){
-                    terreno[i] = [img.height];
+			    context.drawImage(img, 0, 0);
 
-										for(j = 0; j < img.height; j++){
-                        if(data[x] <= 10){
-                            terreno[i][j] = new THREE.Mesh( geometry, material1);
-													}else if(data[x] > 13){
-														terreno[i][j] = new THREE.Mesh( geometry, material3);
-                        	}else{
-														terreno[i][j] = new THREE.Mesh( geometry, material2);
-													}
+			    for(var i = 0; i < size; i++) {
+			    	data[i] = 0;
+			    }
 
-            //Per avere una posizione in altezza coerente traslo anche su x
-						terreno[i][j].position.set(i, data[x]/4, j);
+			    var imgd = context.getImageData(0, 0, img.width, img.height);
+			    var pix = imgd.data;
 
-          	//L'altezza e quindi la scalatura su y viene data dal valore di data[x]
-						terreno[i][j].scale.y = data[x]/2;
-						x++;
-				    scene.add(terreno[i][j]);
-					}
-      	}
+			    var j = 0;
+			    for(var i = 0; i < pix.length; i += 4) {
+			        var all = pix[i] + pix[i+1] + pix[i+2];
+			        data[j++] = scale * all / 3;
+			    }
+
+			    return data;
 			}
 
-			// load img source
-            img.src = "heightmap/heightmap.png";
+			// terrain
+			// Heightmap 3d object
+	Heightmap = function(){
+	  this.mesh = new THREE.Object3D()
 
+	  // First load data of the heightmap
 
+	  img = new Image()
+	  img.src = "heightmap/heightmap.png";
+		//img.setAttribute('crossOrigin', 'anonymous');
+	  img.onload = (e) => {
+	    var data = getHeightData(img);
 
+	    // Boxes drawing
+	    var simpleBoxGeompetry = new THREE.BoxGeometry(1,1,1);
+	    // Colori differenti per le diverse altezze
+	    var sandMaterial = new THREE.MeshBasicMaterial({color: 0xF4A460});
+	    var brownMaterial = new THREE.MeshBasicMaterial({color: 0x964B00});
+	    var greenMaterial = new THREE.MeshBasicMaterial({color: 0x00FF00});
 
+	    var x = 0
+	    var z = 0
+	    var box
+	    for (let i = 0; i < data.length; i++) {
+	      if (i % 60 == 0) {
+	        z += 1
+	        x = 0
+	      }
+	      //Colora il terreno in base all'altezza
+	      if(data[i] < 50){
+	        box = new THREE.Mesh(simpleBoxGeompetry, greenMaterial)
+	      } else if (data[i] < 130) {
+	        box = new THREE.Mesh(simpleBoxGeompetry, brownMaterial)
+	      } else (data[i] < 180) {
+	        box = new THREE.Mesh(simpleBoxGeompetry, sandMaterial)
+	      }
 
+	      this.mesh.add(box)
+	      box.position.set(X,1,Z)  // Setta la posizione della box
+	      box.scale.set(1, data[i] * .03, 1) // Scala l'altezza in base al valore contenuto sull'array data
 
+	      x += 1 //Incrementa di 1 la posizione del prossimo box
+	    }
+	  }
 
+	}
+
+	//
+	var terrain = Heightmap();
 
 			/*
 			//BARCA

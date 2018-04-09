@@ -22,7 +22,7 @@
 		<script src="lib/OrbitControls.js"></script>
 		<script src="lib/TextureLoader.js"></script>
 
-		
+
 	</head>
 	<body>
 
@@ -42,58 +42,95 @@
 			renderer.shadowMap.enabled = true;
 			document.body.appendChild( renderer.domElement );
 			//Posizione della camera
-			camera.position.set(20,20,20);
+			camera.position.set(0,300,800);
 			camera.lookAt( new THREE.Vector3(0,0,0));
 
 
-			// terrain
-			var img = new Image();
-			img.onload = function () {
+			function getHeightData(img, scale) {
+				if(scale == undefined) {
+					scale = 0.15;
+				}
 
-				//get height data from img
-				var data = getHeightData(img,0.1);
+			    var canvas = document.createElement('canvas');
+			    canvas.width = img.width;
+			    canvas.height = img.height;
+			    var context = canvas.getContext('2d');
 
-                var geometry = new THREE.BoxGeometry(1,1,1);
-                var material1 = new THREE.MeshBasicMaterial({color: 0xdee334});
-                var material2 = new THREE.MeshBasicMaterial({color: 0x208c0d});
-                var material3 = new THREE.MeshBasicMaterial({color: 0x8c7d62});
+			    var size = img.width * img.height;
+			    var data = new Float32Array(size);
 
-                var x = 0;
-                var terreno = [img.width];
-								for(i = 0; i < img.width; i++){
-                    terreno[i] = [img.height];
+			    context.drawImage(img, 0, 0);
 
-										for(j = 0; j < img.height; j++){
-                        if(data[x] <= 10){
-                            terreno[i][j] = new THREE.Mesh( geometry, material1);
-													}else if(data[x] > 13){
-														terreno[i][j] = new THREE.Mesh( geometry, material3);
-                        	}else{
-														terreno[i][j] = new THREE.Mesh( geometry, material2);
-													}
+			    for(var i = 0; i < size; i++) {
+			    	data[i] = 0;
+			    }
 
-            //Per avere una posizione in altezza coerente traslo anche su x
-						terreno[i][j].position.set(i, data[x]/4, j);
+			    var imgd = context.getImageData(0, 0, img.width, img.height);
+			    var pix = imgd.data;
 
-          	//L'altezza e quindi la scalatura su y viene data dal valore di data[x]
-						terreno[i][j].scale.y = data[x]/2;
-						x++;
-				    scene.add(terreno[i][j]);
-					}
-      	}
+			    var j = 0;
+			    for(var i = 0; i < pix.length; i += 4) {
+			        var all = pix[i] + pix[i+1] + pix[i+2];
+			        data[j++] = scale * all / 3;
+			    }
+
+			    return data;
 			}
 
+			var terreno = new THREE.Object3D();
+			var img = new Image();
+			img.onload = function () {
+				//get height data from img
+				var data = getHeightData(img);
+				// terreno =createTerrain(15,15,15,data,"textures/11635.jpg");
+				// terreno.position.set(-700,-200*10+97,-400);
+				terreno = createTerrain(10,10,10,data);
+				terreno.position.set(-490,-127*10,-280);
+				scene.add(terreno);
+			}
 			// load img source
-            img.src = "heightmap/heightmap.png";
+				img.src = "heightmap/River 32.png";
 
+				function createTerrain(larghezza, altezza, profondita, arrayAltezze, image){
+					var pivotTerreno = new THREE.Object3D();
+					var material;
+					var positionX = 0;
+					var positionZ = 0;
+					var lato = Math.ceil(Math.sqrt(arrayAltezze.length));
 
+					// Parametri geometria: materiale e colore
+					if(image == undefined){
+						material = new THREE.MeshLambertMaterial({color:0Xa0522d});
+						//colre marroncino
+					}
+					else{
+						material = new THREE.MeshLambertMaterial({color:0x000000});
+					}
+					var cubeGeometry = new THREE.BoxBufferGeometry(larghezza,altezza,profondita);
+					for(var i=0;i<arrayAltezze.length;i++){
+						var cube = new THREE.Mesh(cubeGeometry,material);
+						cube.castShadow = true;
+						cube.receiveShadow = true;
+						cube.position.set(positionX + 300,arrayAltezze[i]*altezza/2 + 950,positionZ + 100);
+						pivotTerreno.add(cube);
+						if(positionX+larghezza<lato*larghezza){
+							positionX +=larghezza;
+						}
+						else{
+							positionX = 0;
+							if(positionZ+profondita<lato*profondita){
+								positionZ +=profondita;
+							}
+							else{
+								positionZ = 0;
+							}
+						}
+						cube.scale.y = arrayAltezze[i];
+					}
+					pivotTerreno.position.set(-lato/2,0,-lato/2);
+					return pivotTerreno;
+				}
 
-
-
-
-
-
-			/*
 			//BARCA
 				//Primo box barca
 				var geometry = new THREE.BoxGeometry(10,3,3);
@@ -196,9 +233,10 @@
 				//Gruppo barca
 				barca = new THREE.Group();
 				barca.add(boat, prua1, prua2, prua3, prua4, prua5, prua6, prua7, prua8, prua9, vedetta, vedetta2);
-				barca.position.z = -30;
+				barca.position.set(-20,-40,-200);
 				barca.rotation.y = -90*Math.PI/180;
-				scene.add( barca);
+				barca.scale.set(8,8,8);
+				scene.add(barca);
 
 			//AUTOMOBILE
 				//Telaio
@@ -244,18 +282,19 @@
 				//Gruppo auto
 				auto = new THREE.Group();
 				auto.add(telaio, anterioreDx, anterioreSx, posterioreSx, posterioreDx, tergicristallo, tettuccio);
-				auto.position.x = -10;
+				auto.position.set(-150,-16.5,40);
 				scene.add(auto);
 
 			//TOWER BRIDGE
 				//Torre destra di base
-				var geometry = new THREE.BoxGeometry(25,8,8);
+				var geometry = new THREE.BoxGeometry(25,3,8);
 				var material = new THREE.MeshPhongMaterial({color: 0x070707});
 				var towerRight = new THREE.Mesh(geometry,material);
 				towerRight.castShadow = true;
 				towerRight.receiveShadow = true;
 				towerRight.position.x = 22.5;
 				towerRight.position.z = 10;
+				towerRight.position.y = 2.5;
 				//Torre destra
 				var geometry = new THREE.BoxGeometry(5,15,8);
 				var material = new THREE.MeshPhongMaterial({color: 0xfdefcc});
@@ -266,13 +305,14 @@
 				towerR.position.z = 10;
 				towerR.position.y = 16.5;
 				//Torre sinistra di base
-				var geometry = new THREE.BoxGeometry(25,8,8);
+				var geometry = new THREE.BoxGeometry(25,3,8);
 				var material = new THREE.MeshPhongMaterial({color: 0x070707});
 				var towerLeft = new THREE.Mesh(geometry,material);
 				towerLeft.castShadow = true;
 				towerLeft.receiveShadow = true;
 				towerLeft.position.x = -22.5;
 				towerLeft.position.z = 10;
+				towerLeft.position.y = 2.5;
 				//Torre sinistra
 				var geometry = new THREE.BoxGeometry(5,15,8);
 				var material = new THREE.MeshPhongMaterial({color: 0xfdefcc});
@@ -351,45 +391,44 @@
 				scene.add(gugliaDx, gugliaSx);
 
 				//Piattaforma destra
-				pivotRight = new THREE.Object3D();
-				scene.add(pivotRight);
-				pivotRight.position.set(15,3.5,10);
 				var geometry = new THREE.BoxGeometry(10,0.8,7.8);
 				var material = new THREE.MeshPhongMaterial({color: 0x101010, wireframe:false});
 				platformRight = new THREE.Mesh(geometry, material);
 				platformRight.castShadow = true;
 				platformRight.receiveShadow = true;
-				platformRight.position.x = -10;
+				platformRight.position.set(-5,3.5,10);
 				platformRightAngle = 0;
-				pivotRight.add(platformRight);
+
 				//Piattaforma sinistra
-				pivotLeft = new THREE.Object3D();
-				scene.add(pivotLeft);
-				pivotLeft.position.set(-15,3.5,10);
 				var geometry = new THREE.BoxGeometry(10,0.8,7.8);
 				var material = new THREE.MeshPhongMaterial({color: 0x101010, wireframe:false});
 				platformLeft = new THREE.Mesh(geometry, material);
 				platformLeft.castShadow = true;
 				platformLeft.receiveShadow = true;
-				platformLeft.position.x = 10;
+				platformLeft.position.set(5,3.5,10);
 				platformLeftAngle = 0;
-				pivotLeft.add(platformLeft);
+
 				//Gruppo ponte levatoio
 				var ponteLevatoio = new THREE.Group();
-				ponteLevatoio.add(towerLeft,towerRight, towerR, towerL, piloneDx, piloneSx, piloneSx2, piloneDx2, upperBridge);
+				ponteLevatoio.add(towerLeft,towerRight, towerR, towerL, piloneDx, piloneSx, piloneSx2, piloneDx2, upperBridge, platformLeft, platformRight, gugliaDx, gugliaSx);
+				ponteLevatoio.scale.set(5,5,5);
+				ponteLevatoio.position.set(-20,-32,-5);
 				scene.add(ponteLevatoio);
 
 			//ACQUA
-			var geometry = new THREE.BoxGeometry(30,2,70);
+			var geometry = new THREE.BoxGeometry(240,280,318);
 			var material = new THREE.MeshLambertMaterial({color:0x000080,
 																										refractionRatio: 0.5,
 																										opacity: 0.7,
 																										transparent: true
 																									});
 			var water = new THREE.Mesh(geometry,material);
+			water.position.x = -35;
+			water.position.y = -179.2;
+			water.position.z = -25;
 			scene.add(water);
 
-			//SCENARIO
+			/*SCENARIO
 			var geometry = new THREE.BoxGeometry(20,2,70);
 			var material = new THREE.MeshPhongMaterial({color: 0xf4a460});
 			var scenarioL = new THREE.Mesh(geometry,material);
@@ -412,10 +451,10 @@
 			scenarioL2.position.x = 32.5;
 			scenarioL2.position.y = 1.5;
 
-			scene.add(scenarioR, scenarioL, scenarioL2);
+			scene.add(scenarioR, scenarioL, scenarioL2);*/
 
 
-			//ALBERO
+			/*ALBERO
 				//Tronco
 				var geometry = new THREE.BoxGeometry(1,2,1);
 				var material = new THREE.MeshPhongMaterial({color: 0x644117});
@@ -470,15 +509,6 @@
 			dirLight.shadow.mapSize.height = 1024;
 
 
-			// GROUND
-			var groundGeo = new THREE.PlaneBufferGeometry( 10000, 10000 );
-			var groundMat = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x050505 } );
-			groundMat.color.setHSL( 0.095, 1, 0.75 );
-			var ground = new THREE.Mesh( groundGeo, groundMat );
-			ground.position.y = -0.5;
-			ground.rotation.x = -Math.PI/2;
-			scene.add( ground );
-			ground.receiveShadow = true;
 
 			stats = new Stats();
 			stats.domElement.style.position = 'absolute';
@@ -486,7 +516,7 @@
 			document.body.appendChild( stats.domElement );
 
 			// uncomment if you need to draw coordinate axes when building the scene
-			//Coordinates.drawAllAxes();
+			Coordinates.drawAllAxes();
 
 			controls = new THREE.OrbitControls( camera );
 			controls.addEventListener( 'change', Render );
@@ -501,37 +531,52 @@
 			Render();
 
 
-			/*barca.position.z += 0.05;
+			barca.position.z += 0.5;
+			var angle = 2.25*Math.PI/180;
 
+			//Alza il ponte
+			if (barca.position.z < -100 && barca.position.z >= -110){
 
-			//Apertura del ponte levatoio
-			if (barca.position.z > -10 && barca.position.z < 30 && platformLeftAngle < Math.PI/4){
-					//Rotazione del ponte levatoio
-					var angleRotation = Math.PI/180;
-					platformRightAngle += angleRotation;
-	        platformLeftAngle += angleRotation;
-					platformRight.rotateZ(- angleRotation);
-	        platformLeft.rotateZ(angleRotation);
-				}
+					platformRight.rotation.z += angle;
+					platformRight.position.y += 5*Math.sin(angle)-0.00025;
+					console.log(platformRight.position.y);
+					if(platformRight.position.y >= 4.9){
+						platformRight.position.x -= 0.08;
+					}
 
-			//Chiusura ponte levatoio
-			if (barca.position.z > 30 && platformLeftAngle >= 0){
-					//Rotazione del ponte levatoio
-					var angleRotation = -Math.PI/180;
-					platformRightAngle += angleRotation;
-	        platformLeftAngle += angleRotation;
-					platformRight.rotateZ(-angleRotation);
-	        platformLeft.rotateZ(angleRotation);
+					platformLeft.rotation.z -= angle;
+					platformLeft.position.y += 5*Math.sin(angle)-0.00025;
+					if(platformLeft.position.y >= 4.9){
+						platformLeft.position.x += 0.08;
+					}
+			}else{
+
 			}
 
+			//Abbassa il ponte
+			if(barca.position.z < 60 && barca.position.z >= 50){
+					platformRight.rotation.z -= angle;
+					platformRight.position.y -= 5*Math.sin(angle)-0.00025;
+					if(platformRight.position.y <= 4.9){
+						platformRight.position.x += 0.13;
+					}
+
+					platformLeft.rotation.z += angle;
+					platformLeft.position.y -= 5*Math.sin(angle)-0.00025;
+					if(platformLeft.position.y <= 4.9){
+						platformLeft.position.x -= 0.13;
+					}
+			}
+
+
 			//Movimento auto
-			if (platformLeftAngle <= 0){
-				auto.position.x += 0.05;
+			if (barca.position.z > -100 && barca.position.z < 200){
+				auto.position.x += 0.5;
 			}else{
 				auto.position.x = auto.position.x;
 			}
-			*/
-			console.log();
+
+			console.log("Posizione barca " + barca.position.z,"Posizione macchina " + auto.position.x);
 
 		}
 

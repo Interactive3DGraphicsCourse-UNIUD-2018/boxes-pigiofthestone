@@ -3,14 +3,14 @@
 ![Image from Wikipedia](https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Tower_Bridge_London_Feb_2006.jpg/1920px-Tower_Bridge_London_Feb_2006.jpg)
 
 ## Idee iniziali
-Le mie idee iniziali sono state molteplici ma sono state tutte scartate a causa o del poco tempo disponibile o per l'eccessiva mole di lavoro da dedicarci. Inizialmente ho pensato ad un cubo di Rubik auto-risolvente o risolvibile dall'utente ma mamma [Google](https://www.google.com/doodles/rubiks-cube) c'aveva gia pensato. Poi ho pensato di creare un piccolo mondo Pokémon con alcuni dei personaggi animati ma anche questa idea è stata scartata. Infine spulciando un po' su [Google Poly](https://poly.google.com/) ho trovato [questa barchetta](https://poly.google.com/view/0C28iix4FPm) che mi ha fatto venire l'ispirazione. Ho deciso così di creare una barchetta che naviga su di un fiume e di utilizzare un ponte levatoio per eseguire l'animazione. Ho preso spunto dal [Tower Bridge](https://it.wikipedia.org/wiki/Tower_Bridge) di Londra per il ponte e poi per complicarmi ancora di più la vita ho deciso di aggiungerci anche un'automobile che passasse sopra il ponte.
+Le mie idee iniziali sono state molteplici ma sono state tutte scartate a causa o del poco tempo disponibile o per l'eccessiva mole di lavoro da dedicarci. Inizialmente ho pensato ad un cubo di Rubik auto-risolvente o risolvibile dall'utente ma mamma [Google](https://www.google.com/doodles/rubiks-cube) c'aveva gia pensato. Poi ho pensato di creare un piccolo mondo Pokémon con alcuni dei personaggi animati ma anche questa idea è stata scartata. Infine spulciando un po' su [Google Poly](https://poly.google.com/) ho trovato [questa barchetta](https://poly.google.com/view/0C28iix4FPm) che mi ha fatto venire l'ispirazione. Ho deciso così di creare una barchetta che naviga su di un fiume e di utilizzare un ponte levatoio per eseguire l'animazione. Ho preso spunto dal [Tower Bridge](https://it.wikipedia.org/wiki/Tower_Bridge) di Londra per il ponte e poi ho deciso di aggiungerci anche un'automobile che passasse sopra il ponte.
 
 ## Disegni preliminari e prima stesura del codice
 
-- Try to work out a basic project which satisfies all requirements well before the deadline and as soon as possible: you will then use the remaining time to refine, improve and polish.
-- If you are stuck for too much time on a problem, ask for help, preferably in the forum.
-- the process is as important as the result. Use this project to learn a workflow, and how to use tools effectively. Experiment, and try to come up with efficient, elegant, and well commented code.
-- commit often in your git repository and with meaningful comments.
+Ho iniziato il progetto facendo qualche schizzo preliminare per avere un'idea degli ingombri spaziali.
+![Sketch barca](E:\Users\Pierluigi\Documents\GitHub\boxes-pigiofthestone\sketches\Document_2.jpg)
+Ho disegnato poi lo scenario e il ponte levatoio.
+![Sketch ponte e terreno](E:\Users\Pierluigi\Documents\GitHub\boxes-pigiofthestone\sketches\Document_3.jpg)
 
 ## Goals
 In this project you'll first create an interesting scene of your own design, made up just of boxes. The boxes can be
