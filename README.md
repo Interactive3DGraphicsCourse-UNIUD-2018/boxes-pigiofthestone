@@ -14,11 +14,11 @@ Ho iniziato il progetto facendo qualche schizzo preliminare per avere un'idea de
 ![Sketch barca](https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_2.jpg)
 Ho disegnato poi lo scenario e il ponte levatoio.
 ![Sketch ponte e terreno](https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_3.jpg)
-(https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_4.jpg)
-(https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_5.jpg)
-(https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_6.jpg)
-(https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_7.jpg)
-(https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_8.jpg)
+![Sketch ponte e terreno](https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_4.jpg)
+![Sketch ponte e terreno](https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_5.jpg)
+![Sketch ponte e terreno](https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_6.jpg)
+![Sketch ponte e terreno](https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_7.jpg)
+![Sketch ponte e terreno](https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_8.jpg)
 
 Ho iniziato scrivendo il codice della barca e del ponte, poi mi sono concentrato sull'animazione del ponte levatoio.
 Finito di scrivere il grosso degli oggetti in scena mi sono concentrato sulla creazione della heightmap. Ho trovato molto difficoltoso creare la heightmap, visto che incappavo in continui errori.
@@ -28,4 +28,4 @@ Finito di scrivere il codice di partenza mi sono concentrato per sistemare alcun
 - ho aggiustato la rotazione delle piattaforme che "uscivano" dal loro asse di rotazione
 - ho scalato tutti gli oggetti principali in base alla grandezza della nuova heightmap
 - ho aggiustato l'animazione dell'auto. Ora si ferma prima che il ponte si alzi
-- ho creato una heightmap mia con un editor di immagini 
+- ho creato una heightmap mia con un editor di immagini
