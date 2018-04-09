@@ -16,7 +16,6 @@ Ho disegnato poi lo scenario e il ponte levatoio.
 ![Sketch ponte e terreno](https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_3.jpg)
 ![Sketch ponte e terreno](https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_4.jpg)
 ![Sketch ponte e terreno](https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_5.jpg)
-![Sketch ponte e terreno](https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_6.jpg)
 ![Sketch ponte e terreno](https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_7.jpg)
 ![Sketch ponte e terreno](https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_8.jpg)
 
