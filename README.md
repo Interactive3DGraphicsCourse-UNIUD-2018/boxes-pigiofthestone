@@ -8,9 +8,9 @@ Le mie idee iniziali sono state molteplici ma sono state tutte scartate a causa 
 ## Disegni preliminari e prima stesura del codice
 
 Ho iniziato il progetto facendo qualche schizzo preliminare per avere un'idea degli ingombri spaziali.
-![Sketch barca](E:\Users\Pierluigi\Documents\GitHub\boxes-pigiofthestone\sketches\Document_2.jpg)
+![Sketch barca](https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_2.jpg)
 Ho disegnato poi lo scenario e il ponte levatoio.
-![Sketch ponte e terreno](E:\Users\Pierluigi\Documents\GitHub\boxes-pigiofthestone\sketches\Document_3.jpg)
+![Sketch ponte e terreno](https://github.com/Interactive3DGraphicsCourse-UNIUD-2018/boxes-pigiofthestone/blob/master/sketches/Document_3.jpg)
 
 ## Goals
 In this project you'll first create an interesting scene of your own design, made up just of boxes. The boxes can be
